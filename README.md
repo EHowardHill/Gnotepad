@@ -11,13 +11,13 @@ Gnotepad automatically saves upon keypress and uses Ctrl+C to terminate the appl
 1. **Install Build Essentials:**
    ```sudo apt install build-essential```
 
-2. **Install ncurses libraries**
+2. **Install ncurses libraries:**
     ```sudo apt install libncurses5-dev libncursesw5-dev```
 
-3. **Building**
+3. **Build:**
     ```make```
 
-4. **Running Gnotepad**
+4. **Run:**
     ```./gnotepad```
 
 You may also provide the filename to open/save as an argument. Otherwise, it will use "output.txt" as a default.
