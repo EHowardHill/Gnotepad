@@ -1,10 +1,29 @@
 # Gnotepad
- Extremely small notepad
 
-The only requirement is ncurses for now.
-To make on Ubuntu/Debian systems, you'll want to run this:
-`sudo apt-get install build-essential`
-And then this to get the ncurses libraries:
-`sudo apt-get install libncurses5-dev libncursesw5-dev`
+Gnotepad is an extremely simple and extremely lightweight text editor. It's designed to be like 'Vi' for people who are afraid of Vi, and it's optimized for note-taking.
 
-You can make the program with `make`.
+Gnotepad automatically saves upon keypress and uses Ctrl+C to terminate the application.
+
+**Prerequisites:**
+
+* **ncurses Library:** Gnotepad requires the ncurses library for its text-based interface functionality.
+
+**Installation:**
+
+**Ubuntu/Debian Systems:**
+
+1. **Install Build Essentials:**
+   ```sudo aptinstall build-essential```
+
+2. **Install ncurses libraries**
+    ```sudo apt install libncurses5-dev libncursesw5-dev```
+
+3. **Building**
+    ```make```
+
+4. **Running Gnotepad**
+    ```./gnotepad```
+
+You may also provide the filename to open/save as an argument. Otherwise, it will use "output.txt" as a default.
+
+    ```./gnotepad myfile.txt```
