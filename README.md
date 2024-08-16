@@ -4,16 +4,12 @@ Gnotepad is an extremely simple and extremely lightweight text editor. It's desi
 
 Gnotepad automatically saves upon keypress and uses Ctrl+C to terminate the application.
 
-**Prerequisites:**
-
-* **ncurses Library:** Gnotepad requires the ncurses library for its text-based interface functionality.
-
 **Installation:**
 
 **Ubuntu/Debian Systems:**
 
 1. **Install Build Essentials:**
-   ```sudo aptinstall build-essential```
+   ```sudo apt install build-essential```
 
 2. **Install ncurses libraries**
     ```sudo apt install libncurses5-dev libncursesw5-dev```
