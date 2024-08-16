@@ -9,17 +9,7 @@ using namespace std;
 int _argc;
 char **_argv;
 
-int countWords(const vector<string> &buffer)
-{
-    int wordCount = 0;
-
-    for (const string &word : buffer)
-    {
-        wordCount += count(word.begin(), word.end(), ' ');
-    }
-
-    return wordCount + 1; // Add 1 to account for the last word
-}
+#define DEFAULT_FILENAME "output.txt"
 
 class TextEditor
 {
@@ -84,8 +74,21 @@ private:
     {
         clear();
 
-        auto word_count = countWords(buffer);
-        mvprintw(max_y - 1, 0, "Ctrl+C to exit | Words: %d", word_count);
+        int word_count = 0;
+        word_count++;
+        for (const string &word : buffer)
+        {
+            word_count += count(word.begin(), word.end(), ' ');
+        }
+
+        if (_argc == 1)
+        {
+            mvprintw(max_y - 1, 0, "Ctrl+C to exit | output.txt | Words: %d", word_count);
+        }
+        else
+        {
+            mvprintw(max_y - 1, 0, "Ctrl+C to exit | %s | Words: %d", _argv[1], word_count);
+        }
 
         int lines_to_display = max_y - 2;
         for (int i = 0; i < lines_to_display && view_start + i < buffer.size(); ++i)
@@ -162,6 +165,56 @@ private:
                 }
             }
             break;
+
+        case KEY_DC: // Handle Delete key
+            if (cursor_x < buffer[cursor_y].length())
+            {
+                buffer[cursor_y].erase(cursor_x, 1);
+            }
+            else if (cursor_y < buffer.size() - 1)
+            {
+                buffer[cursor_y] += buffer[cursor_y + 1];
+                buffer.erase(buffer.begin() + cursor_y + 1);
+            }
+            word_wrap();
+            break;
+
+        case KEY_HOME:
+            cursor_x = 0;
+            break;
+
+        case KEY_END:
+        {
+            int cursor_x_line = cursor_x / max_x;
+            int new_cursor_x = ((cursor_x_line + 1) * max_x) - 1;
+
+            if (new_cursor_x > buffer[cursor_y].length())
+            {
+                new_cursor_x = buffer[cursor_y].length();
+            }
+
+            cursor_x = new_cursor_x;
+        }
+        break;
+
+        case KEY_PPAGE:
+            // Scroll up by a page
+            view_start -= max_y - 2;
+            if (view_start < 0)
+            {
+                view_start = 0;
+            }
+            break;
+
+        case KEY_NPAGE:
+            // Scroll down by a page
+            view_start += max_y - 2;
+            if (view_start > buffer.size() - max_y + 2)
+            {
+                view_start = buffer.size() - max_y + 2;
+            }
+            break;
+
         case KEY_ENTER:
         case 10: // Enter key
             buffer.insert(buffer.begin() + cursor_y + 1, buffer[cursor_y].substr(cursor_x));
@@ -180,22 +233,23 @@ private:
                 cursor_x++;
             }
 
-            // Save file contents
-            string filename = (_argc == 2) ? _argv[1] : "output.txt";
-            ofstream outfile(filename);
-
-            if (outfile.is_open())
-            {
-                for (const string &line : buffer)
-                {
-                    outfile << line << endl;
-                }
-                outfile.close();
-                saved = true;
-            }
-
             break;
         }
+
+        // Save file contents
+        string filename = (_argc == 2) ? _argv[1] : DEFAULT_FILENAME;
+        ofstream outfile(filename);
+
+        if (outfile.is_open())
+        {
+            for (const string &line : buffer)
+            {
+                outfile << line << endl;
+            }
+            outfile.close();
+            saved = true;
+        }
+
         word_wrap();
 
         return 1;
